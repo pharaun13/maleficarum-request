@@ -9,11 +9,5 @@
         "psr-4": {
             "Maleficarum\\Request\\": "src/Request/"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-request.git"
-        }
-    ]
+    }
 }
