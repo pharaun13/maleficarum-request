@@ -1,4 +1,7 @@
 <?php
+/**
+ * This class provides functionality common to all parsers classes.
+ */
 
 namespace Maleficarum\Request\Parser;
 
@@ -26,18 +29,18 @@ abstract class AbstractParser
     /**
      * Parse POST data
      *
-     * @return mixed
+     * @return array
      */
-    abstract public function parsePostData();
+    abstract public function parsePostData() : array;
     /* ------------------------------------ Abstract methods END --------------------------------------- */
 
     /* ------------------------------------ Class methods START ---------------------------------------- */
     /**
      * Parse GET data
      *
-     * @return mixed
+     * @return array
      */
-    public function parseGetData() {
+    public function parseGetData() : array {
         $data = (array)$this->getRequest()->getQuery();
         $data = $this->sanitizeData($data);
 
@@ -51,7 +54,7 @@ abstract class AbstractParser
      *
      * @return array
      */
-    protected function sanitizeData(array $data) {
+    protected function sanitizeData(array $data) : array {
         array_walk_recursive($data, function (&$item) {
             is_string($item) and $item = trim(filter_var($item, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES));
         });
@@ -75,9 +78,9 @@ abstract class AbstractParser
      *
      * @param \Phalcon\Http\Request $request
      *
-     * @return $this
+     * @return \Maleficarum\Request\Parser\AbstractParser
      */
-    protected function setRequest(\Phalcon\Http\Request $request) {
+    protected function setRequest(\Phalcon\Http\Request $request) : \Maleficarum\Request\Parser\AbstractParser {
         $this->request = $request;
 
         return $this;

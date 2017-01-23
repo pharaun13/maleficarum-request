@@ -33,20 +33,31 @@ class Request
      */
     private $defaultParser = null;
 
+    /**
+     * Internal storage for available request parsers
+     * 
+     * @var array
+     */
+    private static $availableParsers = [
+        self::PARSER_JSON,
+        self::PARSER_URL
+    ];
+
     /* ------------------------------------ Magic methods START ---------------------------------------- */
     /**
      * Initialize a new instance of the request object.
      *
      * @param \Phalcon\Http\Request $phalconRequest
      * @param string $defaultParser
-     * 
-     * @throws \Maleficarum\Request\Exception\UnsupportedMediaTypeException
      */
-    public function __construct(\Phalcon\Http\Request $phalconRequest, $defaultParser) {
+    public function __construct(\Phalcon\Http\Request $phalconRequest, string $defaultParser) {
         // set delegations
         $this->setRequestDelegation($phalconRequest);
         $this->setDefaultParser($defaultParser);
-        $parser = $this->getParser();
+
+        $contentType = $phalconRequest->getHeader('Content-Type');
+        $parser = $this->determineParser($contentType, $defaultParser);
+        $parser = $this->getParser($parser, $phalconRequest);
 
         // set data
         $this->setData([
@@ -58,20 +69,21 @@ class Request
 
     /**
      * Fetch a request param.
-     *
+     * 
      * @param string $name
      *
-     * @throws \InvalidArgumentException
-     * @return string|null
+     * @return mixed
      */
-    public function __get($name) {
+    public function __get(string $name) {
+        $data = $this->getData();
+
         // try post data first
-        if (isset($this->getData()['url'][$name])) {
-            return $this->getData()['url'][$name];
-        } elseif (isset($this->getData()[self::METHOD_POST][$name])) {
-            return $this->getData()[self::METHOD_POST][$name];
-        } elseif (isset($this->getData()[self::METHOD_GET][$name])) {
-            return $this->getData()[self::METHOD_GET][$name];
+        if (isset($data['url'][$name])) {
+            return $data['url'][$name];
+        } elseif (isset($data[self::METHOD_POST][$name])) {
+            return $data[self::METHOD_POST][$name];
+        } elseif (isset($data[self::METHOD_GET][$name])) {
+            return $data[self::METHOD_GET][$name];
         }
 
         return null;
@@ -79,30 +91,32 @@ class Request
 
     /**
      * Enforce the requests Read-Only policy.
-     *
+     * 
      * @param string $name
-     * @param string $val
-     *
+     * @param mixed $val
+     * 
+     * @return void
      * @throws \RuntimeException
      */
-    public function __set($name, $val) {
-        throw new \RuntimeException('Request data is Read-Only. \Maleficarum\Request\Http\Request::__set()');
+    public function __set(string $name, $val) {
+        throw new \RuntimeException(sprintf('Request data is Read-Only. \%s::__set()', static::class));
     }
     /* ------------------------------------ Magic methods END ------------------------------------------ */
 
     /* ------------------------------------ Request methods START -------------------------------------- */
     /**
      * Attach URL parameters
-     *
+     * 
      * @param array $params
      *
      * @return \Maleficarum\Request\Request
      */
-    public function attachUrlParams(array $params) {
+    public function attachUrlParams(array $params) : \Maleficarum\Request\Request {
         $data = $this->getData();
         $data['url'] = $params;
+        $this->setData($data);
 
-        return $this->setData($data);
+        return $this;
     }
 
     /**
@@ -110,7 +124,7 @@ class Request
      *
      * @return string
      */
-    public function getMethod() {
+    public function getMethod() : string {
         return $this->getRequestDelegation()->getMethod();
     }
 
@@ -119,7 +133,7 @@ class Request
      *
      * @return array
      */
-    public function getHeaders() {
+    public function getHeaders() : array {
         return $this->getRequestDelegation()->getHeaders();
     }
 
@@ -130,7 +144,7 @@ class Request
      *
      * @return string
      */
-    public function getHeader($name) {
+    public function getHeader(string $name) : string {
         return $this->getRequestDelegation()->getHeader($name);
     }
 
@@ -139,9 +153,9 @@ class Request
      *
      * @param string $method
      *
-     * @return array|null
+     * @return mixed
      */
-    public function getParameters($method = self::METHOD_GET) {
+    public function getParameters(string $method = self::METHOD_GET) {
         $data = $this->getData();
 
         if ($method === self::METHOD_GET && isset($data[self::METHOD_GET])) {
@@ -160,7 +174,7 @@ class Request
      *
      * @return string
      */
-    public function getUri() {
+    public function getUri() : string {
         return $this->getRequestDelegation()->getURI();
     }
 
@@ -169,7 +183,7 @@ class Request
      *
      * @return bool
      */
-    public function isGet() {
+    public function isGet() : bool {
         return $this->getRequestDelegation()->isGet();
     }
 
@@ -178,7 +192,7 @@ class Request
      *
      * @return bool
      */
-    public function isPost() {
+    public function isPost() : bool {
         return $this->getRequestDelegation()->isPost();
     }
 
@@ -187,7 +201,7 @@ class Request
      *
      * @return bool
      */
-    public function isPut() {
+    public function isPut() : bool {
         return $this->getRequestDelegation()->isPut();
     }
 
@@ -196,43 +210,45 @@ class Request
      *
      * @return bool
      */
-    public function isDelete() {
+    public function isDelete() : bool {
         return $this->getRequestDelegation()->isDelete();
     }
 
     /**
      * Get parser object
      * 
+     * @param string $parserClass
+     * @param \Phalcon\Http\Request $request
+     *
      * @return \Maleficarum\Request\Parser\AbstractParser
-     * 
-     * @throws \Maleficarum\Request\Exception\UnsupportedMediaTypeException
+     * @throws \Maleficarum\Exception\UnsupportedMediaTypeException
      */
-    private function getParser() {
-        $parserClass = $this->determineParser();
+    private function getParser(string $parserClass, \Phalcon\Http\Request $request) : \Maleficarum\Request\Parser\AbstractParser {
         if (empty($parserClass)) {
-            throw new \Maleficarum\Request\Exception\UnsupportedMediaTypeException('Provided Content-Type is not supported. \Maleficarum\Request\Http\Request::getParser()');
+            throw new \Maleficarum\Exception\UnsupportedMediaTypeException(sprintf('Provided Content-Type is not supported. \%s::getParser()', static::class));
         }
 
-        $fqn = 'Maleficarum\Request\Parser\\' . $parserClass;
         /** @var \Maleficarum\Request\Parser\AbstractParser $parser */
-        $parser = new $fqn($this->getRequestDelegation());
+        $parser = \Maleficarum\Ioc\Container::get('Maleficarum\Request\Parser\\' . $parserClass, [$request]);
 
         return $parser;
     }
 
     /**
      * Determine request parser
+     * 
+     * @param string $contentType
+     * @param string $defaultParser
      *
-     * @return null|string
+     * @return string|null
      */
-    private function determineParser() {
-        $contentType = $this->getHeader('Content-Type');
+    private function determineParser(string $contentType, string $defaultParser) {
         $parserClass = null;
 
         preg_match('/^application\/json/', $contentType) and $parserClass = self::PARSER_JSON;
         preg_match('/^application\/x-www-form-urlencoded/', $contentType) and $parserClass = self::PARSER_URL;
 
-        empty($contentType) and $parserClass = $this->getDefaultParser();
+        empty($contentType) and $parserClass = $defaultParser;
 
         return $parserClass;
     }
@@ -242,12 +258,12 @@ class Request
     /**
      * Set the request delegation instance.
      *
-     * @param \Phalcon\Http\Request $pr
+     * @param \Phalcon\Http\Request $phalconRequest
      *
      * @return \Maleficarum\Request\Request
      */
-    private function setRequestDelegation(\Phalcon\Http\Request $pr) {
-        $this->phalconRequest = $pr;
+    private function setRequestDelegation(\Phalcon\Http\Request $phalconRequest) : \Maleficarum\Request\Request {
+        $this->phalconRequest = $phalconRequest;
 
         return $this;
     }
@@ -255,7 +271,7 @@ class Request
     /**
      * Fetch the current request object that we delegate to.
      *
-     * @return \Phalcon\Http\Request
+     * @return \Phalcon\Http\Request|null
      */
     private function getRequestDelegation() {
         return $this->phalconRequest;
@@ -268,7 +284,7 @@ class Request
      *
      * @return \Maleficarum\Request\Request
      */
-    private function setData(array $data) {
+    private function setData(array $data) : \Maleficarum\Request\Request {
         $this->data = $data;
 
         return $this;
@@ -284,24 +300,16 @@ class Request
     }
 
     /**
-     * Get defaultParser
-     *
-     * @return string|null
-     */
-    private function getDefaultParser() {
-        return $this->defaultParser;
-    }
-
-    /**
      * Set defaultParser
      *
-     * @param string|null $defaultParser
+     * @param string $defaultParser
      *
-     * @return Request
+     * @return \Maleficarum\Request\Request
+     * @throws \InvalidArgumentException
      */
-    private function setDefaultParser($defaultParser) {
-        if (!in_array($defaultParser, [self::PARSER_JSON, self::PARSER_URL], true)) {
-            throw new \InvalidArgumentException('Invalid parser provided. \Maleficarum\Request\Request::setDefaultParser()');
+    private function setDefaultParser(string $defaultParser) : \Maleficarum\Request\Request {
+        if (!in_array($defaultParser, self::$availableParsers, true)) {
+            throw new \InvalidArgumentException(sprintf('Invalid parser provided. \%s::setDefaultParser()', static::class));
         }
 
         $this->defaultParser = $defaultParser;

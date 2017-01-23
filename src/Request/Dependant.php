@@ -1,6 +1,6 @@
 <?php
 /**
- * This trait provides functionality common to all classes dependant on the \Maleficarum\Request\Request class
+ * This trait provides functionality common to all classes dependant on the \Maleficarum\Request class
  */
 
 namespace Maleficarum\Request;
