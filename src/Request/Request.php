@@ -217,13 +217,13 @@ class Request
     /**
      * Get parser object
      * 
-     * @param string $parserClass
+     * @param string|null $parserClass
      * @param \Phalcon\Http\Request $request
      *
      * @return \Maleficarum\Request\Parser\AbstractParser
      * @throws \Maleficarum\Exception\UnsupportedMediaTypeException
      */
-    private function getParser(string $parserClass, \Phalcon\Http\Request $request) : \Maleficarum\Request\Parser\AbstractParser {
+    private function getParser(string $parserClass = null, \Phalcon\Http\Request $request) : \Maleficarum\Request\Parser\AbstractParser {
         if (empty($parserClass)) {
             throw new \Maleficarum\Exception\UnsupportedMediaTypeException(sprintf('Provided Content-Type is not supported. \%s::getParser()', static::class));
         }

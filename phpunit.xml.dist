@@ -1,0 +1,11 @@
+<phpunit bootstrap="test/bootstrap.php" colors="true">
+    <php>
+        <server name="REQUEST_URI" value="foo" />
+        <server name="HTTP_X_FOO" value="foo" />
+    </php>
+    <testsuites>
+        <testsuite name="unit">
+            <directory suffix="Test.php">test/</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
