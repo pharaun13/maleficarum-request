@@ -206,6 +206,15 @@ class Request
     }
 
     /**
+     * Check if this request has a PATCH method.
+     *
+     * @return bool
+     */
+    public function isPatch() : bool {
+        return $this->getRequestDelegation()->isPatch();
+    }
+
+    /**
      * Check if this request has a DELETE method.
      *
      * @return bool

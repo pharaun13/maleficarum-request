@@ -1,6 +1,11 @@
 # Change Log
 This is the Maleficarum Request component implementation. 
 
+## [2.1.0] - 2017-03-22
+### Added
+- Add method for checking whether HTTP method is PATCH
+- Add tests for the isPatch method
+
 ## [2.0.1] - 2017-02-15
 ### Changed
 - Add tests

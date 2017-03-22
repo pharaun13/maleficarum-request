@@ -297,6 +297,24 @@ class RequestTest extends \Maleficarum\Tests\TestCase
     }
     /* ------------------------------------ Method: isPut END ------------------------------------------ */
 
+    /* ------------------------------------ Method: isPatch START -------------------------------------- */
+    public function testIsPatch() {
+        $phalconRequest = $this
+            ->getMockBuilder('Phalcon\Http\Request')
+            ->disableOriginalConstructor()
+            ->setMethods(['isPatch'])
+            ->getMock();
+        $phalconRequest
+            ->expects($this->once())
+            ->method('isPatch')
+            ->willReturn(true);
+
+        $request = new \Maleficarum\Request\Request($phalconRequest, 'JsonParser');
+
+        $this->assertTrue($request->isPatch());
+    }
+    /* ------------------------------------ Method: isPatch END ---------------------------------------- */
+
     /* ------------------------------------ Method: isDelete START ------------------------------------- */
     public function testIsDelete() {
         $phalconRequest = $this
