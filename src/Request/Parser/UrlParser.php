@@ -1,20 +1,17 @@
 <?php
 /**
  * This class is a specific parser implementation for urlencoded data parsing
- *
- * @extends \Maleficarum\Request\Parser\AbstractParser
  */
+declare (strict_types=1);
 
 namespace Maleficarum\Request\Parser;
 
-class UrlParser extends \Maleficarum\Request\Parser\AbstractParser
-{
-    /* ------------------------------------ AbstractParser methods START ------------------------------- */
+class UrlParser extends \Maleficarum\Request\Parser\AbstractParser {
+    
+    /* ------------------------------------ Class Methods START ---------------------------------------- */
+    
     /**
-     * Parse POST data
-     * 
      * @see \Maleficarum\Request\Parser\AbstractParser::parsePostData()
-     * @return array
      */
     public function parsePostData() : array {
         // fetch request data from $_POST superglobal
@@ -23,5 +20,7 @@ class UrlParser extends \Maleficarum\Request\Parser\AbstractParser
 
         return $data;
     }
-    /* ------------------------------------ AbstractParser methods END --------------------------------- */
+    
+    /* ------------------------------------ Class Methods END ------------------------------------------ */
+    
 }

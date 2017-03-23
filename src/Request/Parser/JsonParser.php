@@ -1,21 +1,17 @@
 <?php
 /**
  * This class is a specific parser implementation for JSON data parsing
- *
- * @extends \Maleficarum\Request\Parser\AbstractParser
  */
+declare (strict_types=1);
 
 namespace Maleficarum\Request\Parser;
 
-class JsonParser extends \Maleficarum\Request\Parser\AbstractParser
-{
-    /* ------------------------------------ AbstractParser methods START ------------------------------- */
+class JsonParser extends \Maleficarum\Request\Parser\AbstractParser {
+    
+    /* ------------------------------------ Class Methods START ---------------------------------------- */
+    
     /**
-     * Parse POST data
-     * 
      * @see \Maleficarum\Request\Parser\AbstractParser::parsePostData()
-     * 
-     * @return array
      */
     public function parsePostData() : array {
         // fetch request data from phalcon (json is handled in a different way that $_REQUEST)
@@ -24,5 +20,6 @@ class JsonParser extends \Maleficarum\Request\Parser\AbstractParser
 
         return $data;
     }
-    /* ------------------------------------ AbstractParser methods END --------------------------------- */
+    
+    /* ------------------------------------ Class Methods END ------------------------------------------ */
 }

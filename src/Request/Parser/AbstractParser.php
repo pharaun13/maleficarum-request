@@ -2,11 +2,14 @@
 /**
  * This class provides functionality common to all parsers classes.
  */
+declare (strict_types=1);
 
 namespace Maleficarum\Request\Parser;
 
-abstract class AbstractParser
-{
+abstract class AbstractParser {
+    
+    /* ------------------------------------ Class Property START --------------------------------------- */
+    
     /**
      * Internal storage for request
      *
@@ -14,7 +17,10 @@ abstract class AbstractParser
      */
     protected $request;
 
+    /* ------------------------------------ Class Property END ----------------------------------------- */
+    
     /* ------------------------------------ Magic methods START ---------------------------------------- */
+    
     /**
      * AbstractParser constructor.
      *
@@ -23,18 +29,22 @@ abstract class AbstractParser
     public function __construct(\Phalcon\Http\Request $request) {
         $this->request = $request;
     }
+    
     /* ------------------------------------ Magic methods END ------------------------------------------ */
 
     /* ------------------------------------ Abstract methods START ------------------------------------- */
+    
     /**
      * Parse POST data
      *
      * @return array
      */
     abstract public function parsePostData() : array;
+    
     /* ------------------------------------ Abstract methods END --------------------------------------- */
 
     /* ------------------------------------ Class methods START ---------------------------------------- */
+    
     /**
      * Parse GET data
      *
@@ -51,7 +61,6 @@ abstract class AbstractParser
      * Sanitize data
      *
      * @param array $data
-     *
      * @return array
      */
     protected function sanitizeData(array $data) : array {
@@ -61,9 +70,11 @@ abstract class AbstractParser
 
         return $data;
     }
+    
     /* ------------------------------------ Class methods END ------------------------------------------ */
 
     /* ------------------------------------ Setters & Getters START ------------------------------------ */
+    
     /**
      * Get request
      *
@@ -77,7 +88,6 @@ abstract class AbstractParser
      * Set request
      *
      * @param \Phalcon\Http\Request $request
-     *
      * @return \Maleficarum\Request\Parser\AbstractParser
      */
     protected function setRequest(\Phalcon\Http\Request $request) : \Maleficarum\Request\Parser\AbstractParser {
@@ -85,5 +95,7 @@ abstract class AbstractParser
 
         return $this;
     }
+    
     /* ------------------------------------ Setters & Getters END -------------------------------------- */
+    
 }

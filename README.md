@@ -1,6 +1,11 @@
 # Change Log
 This is the Maleficarum Request component implementation. 
 
+## [3.0.0] - 2017-03-23
+### Changed
+- Changed internal structure.
+- Added default package initializer.
+
 ## [2.1.0] - 2017-03-22
 ### Added
 - Add method for checking whether HTTP method is PATCH

@@ -2,16 +2,19 @@
 /**
  * The purpose of this class is to provide an abstract layer to accessing request data.
  */
+declare (strict_types=1);
 
 namespace Maleficarum\Request;
 
-class Request
-{
+class Request {
+    
+    /* ------------------------------------ Class Property START --------------------------------------- */
+    
     const PARSER_JSON = 'JsonParser';
     const PARSER_URL = 'UrlParser';
     const METHOD_POST = 'POST';
     const METHOD_GET = 'GET';
-
+    
     /**
      * Internal storage for the delegation request object
      *
@@ -43,7 +46,10 @@ class Request
         self::PARSER_URL
     ];
 
+    /* ------------------------------------ Class Property END ----------------------------------------- */
+
     /* ------------------------------------ Magic methods START ---------------------------------------- */
+    
     /**
      * Initialize a new instance of the request object.
      *
@@ -71,7 +77,6 @@ class Request
      * Fetch a request param.
      * 
      * @param string $name
-     *
      * @return mixed
      */
     public function __get(string $name) {
@@ -94,21 +99,21 @@ class Request
      * 
      * @param string $name
      * @param mixed $val
-     * 
      * @return void
      * @throws \RuntimeException
      */
     public function __set(string $name, $val) {
         throw new \RuntimeException(sprintf('Request data is Read-Only. \%s::__set()', static::class));
     }
+    
     /* ------------------------------------ Magic methods END ------------------------------------------ */
 
-    /* ------------------------------------ Request methods START -------------------------------------- */
+    /* ------------------------------------ Class Methods START ---------------------------------------- */
+    
     /**
      * Attach URL parameters
      * 
      * @param array $params
-     *
      * @return \Maleficarum\Request\Request
      */
     public function attachUrlParams(array $params) : \Maleficarum\Request\Request {
@@ -141,7 +146,6 @@ class Request
      * Fetch a specified header from the request.
      *
      * @param string $name
-     *
      * @return string
      */
     public function getHeader(string $name) : string {
@@ -152,7 +156,6 @@ class Request
      * Fetch parameters of given method
      *
      * @param string $method
-     *
      * @return mixed
      */
     public function getParameters(string $method = self::METHOD_GET) {
@@ -228,7 +231,6 @@ class Request
      * 
      * @param string|null $parserClass
      * @param \Phalcon\Http\Request $request
-     *
      * @return \Maleficarum\Request\Parser\AbstractParser
      * @throws \Maleficarum\Exception\UnsupportedMediaTypeException
      */
@@ -248,7 +250,6 @@ class Request
      * 
      * @param string $contentType
      * @param string $defaultParser
-     *
      * @return string|null
      */
     private function determineParser(string $contentType, string $defaultParser) {
@@ -261,14 +262,15 @@ class Request
 
         return $parserClass;
     }
-    /* ------------------------------------ Request methods END ---------------------------------------- */
+    
+    /* ------------------------------------ Class Methods END ------------------------------------------ */
 
     /* ------------------------------------ Setters & Getters START ------------------------------------ */
+    
     /**
      * Set the request delegation instance.
      *
      * @param \Phalcon\Http\Request $phalconRequest
-     *
      * @return \Maleficarum\Request\Request
      */
     private function setRequestDelegation(\Phalcon\Http\Request $phalconRequest) : \Maleficarum\Request\Request {
@@ -290,7 +292,6 @@ class Request
      * Set data
      *
      * @param array $data
-     *
      * @return \Maleficarum\Request\Request
      */
     private function setData(array $data) : \Maleficarum\Request\Request {
@@ -312,7 +313,6 @@ class Request
      * Set defaultParser
      *
      * @param string $defaultParser
-     *
      * @return \Maleficarum\Request\Request
      * @throws \InvalidArgumentException
      */
@@ -325,5 +325,7 @@ class Request
 
         return $this;
     }
+    
     /* ------------------------------------ Setters & Getters END -------------------------------------- */
+    
 }
