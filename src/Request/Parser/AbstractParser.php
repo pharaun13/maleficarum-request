@@ -7,9 +7,8 @@ declare (strict_types=1);
 namespace Maleficarum\Request\Parser;
 
 abstract class AbstractParser {
-    
     /* ------------------------------------ Class Property START --------------------------------------- */
-    
+
     /**
      * Internal storage for request
      *
@@ -18,9 +17,9 @@ abstract class AbstractParser {
     protected $request;
 
     /* ------------------------------------ Class Property END ----------------------------------------- */
-    
+
     /* ------------------------------------ Magic methods START ---------------------------------------- */
-    
+
     /**
      * AbstractParser constructor.
      *
@@ -29,28 +28,28 @@ abstract class AbstractParser {
     public function __construct(\Phalcon\Http\Request $request) {
         $this->request = $request;
     }
-    
+
     /* ------------------------------------ Magic methods END ------------------------------------------ */
 
     /* ------------------------------------ Abstract methods START ------------------------------------- */
-    
+
     /**
      * Parse POST data
      *
      * @return array
      */
-    abstract public function parsePostData() : array;
-    
+    abstract public function parsePostData(): array;
+
     /* ------------------------------------ Abstract methods END --------------------------------------- */
 
     /* ------------------------------------ Class methods START ---------------------------------------- */
-    
+
     /**
      * Parse GET data
      *
      * @return array
      */
-    public function parseGetData() : array {
+    public function parseGetData(): array {
         $data = (array)$this->getRequest()->getQuery();
         $data = $this->sanitizeData($data);
 
@@ -61,20 +60,21 @@ abstract class AbstractParser {
      * Sanitize data
      *
      * @param array $data
+     *
      * @return array
      */
-    protected function sanitizeData(array $data) : array {
+    protected function sanitizeData(array $data): array {
         array_walk_recursive($data, function (&$item) {
             is_string($item) and $item = trim(filter_var($item, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES));
         });
 
         return $data;
     }
-    
+
     /* ------------------------------------ Class methods END ------------------------------------------ */
 
     /* ------------------------------------ Setters & Getters START ------------------------------------ */
-    
+
     /**
      * Get request
      *
@@ -88,14 +88,14 @@ abstract class AbstractParser {
      * Set request
      *
      * @param \Phalcon\Http\Request $request
+     *
      * @return \Maleficarum\Request\Parser\AbstractParser
      */
-    protected function setRequest(\Phalcon\Http\Request $request) : \Maleficarum\Request\Parser\AbstractParser {
+    protected function setRequest(\Phalcon\Http\Request $request): \Maleficarum\Request\Parser\AbstractParser {
         $this->request = $request;
 
         return $this;
     }
-    
+
     /* ------------------------------------ Setters & Getters END -------------------------------------- */
-    
 }

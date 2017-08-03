@@ -7,9 +7,8 @@ declare (strict_types=1);
 namespace Maleficarum\Request;
 
 trait Dependant {
-    
     /* ------------------------------------ Class Property START --------------------------------------- */
-    
+
     /**
      * Internal storage for the request provider object.
      *
@@ -18,13 +17,14 @@ trait Dependant {
     protected $request = null;
 
     /* ------------------------------------ Class Property END ----------------------------------------- */
-    
+
     /* ------------------------------------ Class Methods START ---------------------------------------- */
-    
+
     /**
      * Inject a new request provider object into this collection.
      *
      * @param \Maleficarum\Request\Request $request
+     *
      * @return \Maleficarum\Request\Request
      */
     public function setRequest(\Maleficarum\Request\Request $request) {
@@ -38,7 +38,7 @@ trait Dependant {
      *
      * @return \Maleficarum\Request\Request
      */
-    public function getRequest() {
+    public function getRequest(): ?\Maleficarum\Request\Request {
         return $this->request;
     }
 
@@ -52,6 +52,6 @@ trait Dependant {
 
         return $this;
     }
-    
+
     /* ------------------------------------ Class Methods END ------------------------------------------ */
 }

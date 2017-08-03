@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum Request component implementation. 
 
+## [4.0.0] - 2017-08-03
+### Changed
+- Make use of nullable types provided in PHP 7.1 (http://php.net/manual/en/migration71.new-features.php)
+
 ## [3.0.0] - 2017-03-23
 ### Changed
 - Changed internal structure.
