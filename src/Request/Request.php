@@ -24,10 +24,17 @@ class Request {
     /**
      * Internal storage for request data fetched from the phalcon object.
      *
-     * @var array|null
+     * @var array
      */
-    private $data = null;
+    private $data = [];
 
+    /**
+     * Internal storage for RAW request data - this will include UNSAFE inputs.
+     * 
+     * @var array
+     */
+    private $rawData = [];
+    
     /**
      * Internal storage for default request parser
      *
@@ -70,6 +77,9 @@ class Request {
             self::METHOD_POST => $parser->parsePostData(),
             self::METHOD_GET => $parser->parseGetData()
         ]);
+        
+        // set raw payload data
+	    $this->setRawData($parser->getRawPostPayload());
     }
 
     /**
@@ -326,14 +336,29 @@ class Request {
      * @throws \InvalidArgumentException
      */
     private function setDefaultParser(string $defaultParser): \Maleficarum\Request\Request {
-        if (!in_array($defaultParser, self::$availableParsers, true)) {
-            throw new \InvalidArgumentException(sprintf('Invalid parser provided. \%s::setDefaultParser()', static::class));
-        }
+	    if (!in_array($defaultParser, self::$availableParsers, true)) {
+		    throw new \InvalidArgumentException(sprintf('Invalid parser provided. \%s::setDefaultParser()', static::class));
+	    }
 
-        $this->defaultParser = $defaultParser;
+	    $this->defaultParser = $defaultParser;
 
-        return $this;
+	    return $this;
     }
 
+	/**
+	 * @return array
+	 */
+	public function getRawData(): array {
+		return $this->rawData;
+	}
+	
+	/**
+	 * @param array $rawData
+	 */
+	public function setRawData(array $rawData) : \Maleficarum\Request\Request {
+		$this->rawData = $rawData;
+		return $this;
+	}
+	
     /* ------------------------------------ Setters & Getters END -------------------------------------- */
 }

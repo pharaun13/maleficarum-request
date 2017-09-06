@@ -38,7 +38,14 @@ abstract class AbstractParser {
      *
      * @return array
      */
-    abstract public function parsePostData(): array;
+    abstract public function parsePostData() : array;
+	
+	/**
+	 * Fetch POST data without any sanitization.
+	 * 
+	 * @return array
+	 */
+    abstract public function getRawPostPayload() : array;
 
     /* ------------------------------------ Abstract methods END --------------------------------------- */
 

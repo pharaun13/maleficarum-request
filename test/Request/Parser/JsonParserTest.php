@@ -7,30 +7,54 @@ declare(strict_types = 1);
 
 namespace Maleficarum\Request\Tests\Parser;
 
-class JsonParserTest extends \Maleficarum\Tests\TestCase
-{
+class JsonParserTest extends \Maleficarum\Tests\TestCase {
+	
     /* ------------------------------------ Method: parseGetData START --------------------------------- */
+    
     /**
      * @dataProvider payloadDataProvider
      */
-    public function testParsePostData($data, $expected) {
+    public function testParsePostData($raw, $sanitized) {
         $request = $this
             ->getMockBuilder('Phalcon\Http\Request')
             ->setMethods(['getJsonRawBody'])
             ->getMock();
+	    
         $request
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getJsonRawBody')
             ->with($this->equalTo(true))
-            ->willReturn($data);
+            ->willReturn($raw);
 
         $parser = new \Maleficarum\Request\Parser\JsonParser($request);
-
-        $data = $parser->parsePostData();
-
-        $this->assertSame($expected, $data);
+        $parsed = $parser->parsePostData();
+        
+        $this->assertSame($parsed, $sanitized);
+	    $this->assertNotEquals($parsed, $raw);
     }
 
+	/**
+	 * @dataProvider payloadDataProvider
+	 */
+    public function testGetRawPostPayload($raw, $sanitized) {
+	    $request = $this
+		    ->getMockBuilder('Phalcon\Http\Request')
+		    ->setMethods(['getJsonRawBody'])
+		    ->getMock();
+
+	    $request
+		    ->expects($this->any())
+		    ->method('getJsonRawBody')
+		    ->with($this->equalTo(true))
+		    ->willReturn($raw);
+
+	    $parser = new \Maleficarum\Request\Parser\JsonParser($request);
+	    $parsed = $parser->getRawPostPayload();
+	    
+	    $this->assertSame($parsed, $raw);
+	    $this->assertNotEquals($parsed, $sanitized);
+    }
+    
     public function payloadDataProvider() {
         return [
             [
@@ -65,5 +89,7 @@ class JsonParserTest extends \Maleficarum\Tests\TestCase
             ]
         ];
     }
+	
     /* ------------------------------------ Method: parseGetData END ----------------------------------- */
+    
 }

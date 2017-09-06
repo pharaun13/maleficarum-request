@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum Request component implementation. 
 
+## [4.1.0] - 2017-09-06
+### Added
+- Added a way to fetch RAW payload data from the request object. This returns data without any sanitization applied to it.
+
 ## [4.0.0] - 2017-08-03
 ### Changed
 - Make use of nullable types provided in PHP 7.1 (http://php.net/manual/en/migration71.new-features.php)
