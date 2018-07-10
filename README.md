@@ -1,6 +1,11 @@
 # Change Log
 This is the Maleficarum Request component implementation. 
 
+## [4.2.0] - 2018-07-10
+### Added
+- Added support for form-data request
+- Added a way to fetch uploaded file
+
 ## [4.1.0] - 2017-09-06
 ### Added
 - Added a way to fetch RAW payload data from the request object. This returns data without any sanitization applied to it.
