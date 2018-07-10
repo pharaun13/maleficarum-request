@@ -11,6 +11,7 @@ class Request {
 
     const PARSER_JSON = 'JsonParser';
     const PARSER_URL = 'UrlParser';
+    const PARSER_FORM_DATA = 'FormDataParser';
     const METHOD_POST = 'POST';
     const METHOD_GET = 'GET';
 
@@ -273,6 +274,7 @@ class Request {
 
         preg_match('/^application\/json/', $contentType) and $parserClass = self::PARSER_JSON;
         preg_match('/^application\/x-www-form-urlencoded/', $contentType) and $parserClass = self::PARSER_URL;
+        preg_match('/^multipart\/form-data/', $contentType) and $parserClass = self::PARSER_FORM_DATA;
 
         empty($contentType) and $parserClass = $defaultParser;
 
@@ -351,14 +353,27 @@ class Request {
 	public function getRawData(): array {
 		return $this->rawData;
 	}
-	
-	/**
-	 * @param array $rawData
-	 */
+
+    /**
+     * @param array $rawData
+     *
+     * @return \Maleficarum\Request\Request
+     */
 	public function setRawData(array $rawData) : \Maleficarum\Request\Request {
 		$this->rawData = $rawData;
 		return $this;
 	}
+
+    /**
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function getUploadedFile(string $key) {
+        /** @var \Maleficarum\Request\File\File $file */
+        $file = \Maleficarum\Ioc\Container::get('Maleficarum\Request\File\File');
+        return $file->getFile($key);
+    }
 	
     /* ------------------------------------ Setters & Getters END -------------------------------------- */
 }
