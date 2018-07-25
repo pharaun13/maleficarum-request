@@ -1,25 +1,26 @@
 <?php
 declare (strict_types=1);
 
-namespace Maleficarum\Request\File;
+namespace Maleficarum\Request\Files;
 
-class File {
+class Files {
 
     /**
      * @var array
      */
     private $files = [];
 
+    /**
+     * Files constructor.
+     */
     public function __construct() {
         isset($_FILES) and $this->files = $_FILES;
     }
 
     /**
-     * @param string $key
-     *
-     * @return null
+     * @return array
      */
-    public function getFile(string $key) {
-        return $this->files[$key] ?? null;
+    public function getFiles() {
+        return $this->files;
     }
 }

@@ -365,14 +365,12 @@ class Request {
 	}
 
     /**
-     * @param string $key
-     *
-     * @return mixed
+     * @return array
      */
-    public function getUploadedFile(string $key) {
-        /** @var \Maleficarum\Request\File\File $file */
-        $file = \Maleficarum\Ioc\Container::get('Maleficarum\Request\File\File');
-        return $file->getFile($key);
+    public function getUploadedFiles() {
+        /** @var \Maleficarum\Request\Files\Files $files */
+        $files = \Maleficarum\Ioc\Container::get('Maleficarum\Request\Files\Files');
+        return $files->getFiles();
     }
 	
     /* ------------------------------------ Setters & Getters END -------------------------------------- */
