@@ -21,13 +21,13 @@ class Initializer {
         $builders = $opts['builders'] ?? [];
         is_array($builders) or $builders = [];
         if (!isset($builders['request']['skip'])) {
-            \Maleficarum\Ioc\Container::register('Maleficarum\Request\Request', function () {
+            \Maleficarum\Ioc\Container::registerBuilder('Maleficarum\Request\Request', function () {
                 return (new \Maleficarum\Request\Request(new \Phalcon\Http\Request, \Maleficarum\Request\Request::PARSER_JSON));
             });
         }
 
         // load request object
-        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Request', \Maleficarum\Ioc\Container::get('Maleficarum\Request\Request'));
+        \Maleficarum\Ioc\Container::registerShare('Maleficarum\Request', \Maleficarum\Ioc\Container::get('Maleficarum\Request\Request'));
 
         return __METHOD__;
     }
