@@ -1,6 +1,12 @@
 # Change Log
 This is the Maleficarum Request component implementation. 
 
+## [5.0.0] - 2018-09-20   
+### Changed   
+- Upgraded IoC component to version 3.x  
+- Upgraded phpunit version  
+- Removed repositories section from composer file  
+
 ## [4.2.0] - 2018-07-10
 ### Added
 - Added support for form-data request

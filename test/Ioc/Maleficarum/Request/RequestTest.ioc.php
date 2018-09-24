@@ -1,6 +1,6 @@
 <?php
 
-\Maleficarum\Ioc\Container::register('Maleficarum\Request\Parser\JsonParser', function () {
+\Maleficarum\Ioc\Container::registerBuilder('Maleficarum\Request\Parser\JsonParser', function () {
     $parser = $this
         ->getMockBuilder('Maleficarum\Request\Parser\JsonParser')
         ->setMethods(['parsePostData', 'parseGetData', 'getRawPostPayload'])
@@ -25,7 +25,7 @@
     return $parser;
 });
 
-\Maleficarum\Ioc\Container::register('Maleficarum\Request\Parser\UrlParser', function () {
+\Maleficarum\Ioc\Container::registerBuilder('Maleficarum\Request\Parser\UrlParser', function () {
     $parser = $this
         ->getMockBuilder('Maleficarum\Request\Parser\UrlParser')
         ->setMethods(['parsePostData', 'parseGetData', 'getRawPostPayload'])
