@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum Request component implementation. 
 
+## [6.0.0] - 2020-04-29
+### Changed
+- Updated to depend on and work with Phalcon 4.0.X
+
 ## [5.0.0] - 2018-09-20   
 ### Changed   
 - Upgraded IoC component to version 3.x  
