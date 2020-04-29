@@ -239,7 +239,7 @@ class RequestTest extends \Maleficarum\Tests\TestCase
 
         $request = new \Maleficarum\Request\Request($phalconRequest, 'JsonParser');
 
-        $this->assertSame('foo', $request->getUri());
+        $this->assertSame('', $request->getUri());
     }
     /* ------------------------------------ Method: getUri END ----------------------------------------- */
 
