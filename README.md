@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum Request component implementation. 
 
+## [6.1.0] - 2025-08-25
+### Added
+- Added support for XML request
+
 ## [6.0.0] - 2020-04-29
 ### Changed
 - Updated to depend on and work with Phalcon 4.0.X

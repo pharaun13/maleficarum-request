@@ -12,6 +12,7 @@ class Request {
     const PARSER_JSON = 'JsonParser';
     const PARSER_URL = 'UrlParser';
     const PARSER_FORM_DATA = 'FormDataParser';
+    const PARSER_XML = 'XmlParser';
     const METHOD_POST = 'POST';
     const METHOD_GET = 'GET';
 
@@ -275,6 +276,7 @@ class Request {
         preg_match('/^application\/json/', $contentType) and $parserClass = self::PARSER_JSON;
         preg_match('/^application\/x-www-form-urlencoded/', $contentType) and $parserClass = self::PARSER_URL;
         preg_match('/^multipart\/form-data/', $contentType) and $parserClass = self::PARSER_FORM_DATA;
+        preg_match('/^text\/xml/', $contentType) and $parserClass = self::PARSER_XML;
 
         empty($contentType) and $parserClass = $defaultParser;
 

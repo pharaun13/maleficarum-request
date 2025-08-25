@@ -4,6 +4,7 @@
     "description": "Maleficarum request component",
     "require": {
         "php": "^7.2",
+        "ext-dom": "*",
         "ext-phalcon": "^4.0",
         "maleficarum/ioc": "^3.0",
         "maleficarum/handler": "^4.0"
