@@ -86,8 +86,7 @@ class XmlParser extends \Maleficarum\Request\Parser\AbstractParser {
             $groups = [];
             foreach ($node->childNodes as $child) {
                 if (in_array($child->nodeType, [XML_TEXT_NODE, XML_CDATA_SECTION_NODE])) {
-                    $value = trim($child->nodeValue);
-                    $value and $result['@value'] = $value;
+                    trim($child->nodeValue) and $result['@value'] = $child->nodeValue;
                 } else {
                     $groups[] = $this->nodeToArray($child);
                 }
