@@ -276,7 +276,7 @@ class Request {
         preg_match('/^application\/json/', $contentType) and $parserClass = self::PARSER_JSON;
         preg_match('/^application\/x-www-form-urlencoded/', $contentType) and $parserClass = self::PARSER_URL;
         preg_match('/^multipart\/form-data/', $contentType) and $parserClass = self::PARSER_FORM_DATA;
-        preg_match('/^text\/xml/', $contentType) and $parserClass = self::PARSER_XML;
+        preg_match('/^(application|text)\/xml/', $contentType) and $parserClass = self::PARSER_XML;
 
         empty($contentType) and $parserClass = $defaultParser;
 
