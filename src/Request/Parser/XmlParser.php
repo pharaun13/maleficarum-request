@@ -57,7 +57,7 @@ class XmlParser extends \Maleficarum\Request\Parser\AbstractParser {
         $raw = $this->getRequest()->getRawBody();
         $raw = preg_replace('/<!DOCTYPE[^>]*>/i', '', $raw);
         $xmlProlog = $this->getXmlProlog($raw);
-        $dom = new \DomDocument($xmlProlog['version'], $xmlProlog['encoding']);
+        $dom = \Maleficarum\Ioc\Container::get('DomDocument', [$xmlProlog['version'], $xmlProlog['encoding']]);
         $result = $dom->loadXML($raw);
 
         if ($result === false) {
