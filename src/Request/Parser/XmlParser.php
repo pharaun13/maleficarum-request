@@ -21,9 +21,13 @@ class XmlParser extends \Maleficarum\Request\Parser\AbstractParser {
      */
     public function parsePostData(): array
     {
-        $xml = $this->getXmlRawBody();
-        $data = $this->nodeToArray($xml->documentElement);
-        $data = $this->sanitizeData($data);
+        try {
+            $xml = $this->getXmlRawBody();
+            $data = $this->nodeToArray($xml->documentElement);
+            $data = $this->sanitizeData($data);
+        } catch (\DOMException $e) {
+            $data = [];
+        }
 
         return $data;
     }
@@ -33,14 +37,20 @@ class XmlParser extends \Maleficarum\Request\Parser\AbstractParser {
      */
     public function getRawPostPayload(): array
     {
-        $xml = $this->getXmlRawBody();
-        $data = $this->nodeToArray($xml->documentElement);
+        try {
+            $xml = $this->getXmlRawBody();
+            $data = $this->nodeToArray($xml->documentElement);
+        } catch (\DOMException $e) {
+            $data = [];
+        }
 
         return $data;
     }
 
     /**
      * @return \DOMDocument
+     *
+     * @throws \DOMException
      */
     private function getXmlRawBody(): \DOMDocument
     {
@@ -48,7 +58,11 @@ class XmlParser extends \Maleficarum\Request\Parser\AbstractParser {
         $raw = preg_replace('/<!DOCTYPE[^>]*>/i', '', $raw);
         $xmlProlog = $this->getXmlProlog($raw);
         $dom = new \DomDocument($xmlProlog['version'], $xmlProlog['encoding']);
-        $dom->loadXML($raw);
+        $result = $dom->loadXML($raw);
+
+        if ($result === false) {
+            throw new \DOMException('Unable to parse the XML document');
+        }
 
         return $dom;
     }
@@ -71,14 +85,14 @@ class XmlParser extends \Maleficarum\Request\Parser\AbstractParser {
         if ($node->hasChildNodes()) {
             $groups = [];
             foreach ($node->childNodes as $child) {
-                if (\in_array($child->nodeType, [XML_TEXT_NODE, XML_CDATA_SECTION_NODE])) {
+                if (in_array($child->nodeType, [XML_TEXT_NODE, XML_CDATA_SECTION_NODE])) {
                     $value = trim($child->nodeValue);
                     $value and $result['@value'] = $value;
                 } else {
                     $groups[] = $this->nodeToArray($child);
                 }
             }
-            $result = \array_merge($result, ...$groups);
+            $result = array_merge($result, ...$groups);
         }
 
         return [$node->nodeName => $result];
