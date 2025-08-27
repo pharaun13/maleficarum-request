@@ -27,7 +27,7 @@ class RequestTest extends \Maleficarum\Tests\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/xml';
+        $_SERVER['HTTP_CONTENT_TYPE'] = 'text/csv';
         new \Maleficarum\Request\Request($phalconRequest, 'JsonParser');
     }
 
